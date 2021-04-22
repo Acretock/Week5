@@ -17,36 +17,49 @@ private:
     int day;
 
 public:
-    int GetYear() const {}
-    int GetMonth() const {}
-    int GetDay() const {}
+    int GetYear() const     { return year; }
+    int GetMonth() const    { return month; }
+    int GetDay() const      { return day; }
 };
 
-bool operator<(const Date& lhs, const Date& rhs);
+bool operator<(const Date& l, const Date& r) {
+    if (l.GetYear() < r.GetDay())
+        return l.GetYear() < r.GetDay();
+    if (l.GetMonth() < r.GetMonth())
+        return l.GetMonth() < r.GetMonth();
+    if (l.GetDay() < r.GetDay())
+        return l.GetDay() < r.GetDay();
+}
 
 class Database {
 private:
-    map< Date, set<string>> data;
+    map< set<Date>, set<string>> data;
 
 public:
     void AddEvent(const Date& date, const string& event) {
-
+        if (data.find({date}) == end(data))
+            data.insert({ {date},{event} });
+        else {
+            data.find({ date })->second.insert(event);
+        }
     }
 
     bool DeleteEvent(const Date& date, const string& event) {
-
+        data.find({ date })->second.erase(event);
     }
 
     int  DeleteDate(const Date& date) {
-
+        data.erase({ date });
     }
 
     set<string> Find(const Date& date) const {
-
+        if (data.find({ date }) != end(data))
+            return data.find({ date })->second;
     }
 
     void Print() const {
-
+        for (auto i : data)
+            ;
     }
 };
 
